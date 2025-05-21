@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,16 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				compass: {
+					'blue': '#3E94F5',
+					'blue-hover': '#2a7fde',
+					'purple': '#9B87F5',
+					'purple-light': '#E5DEFF',
+					'yellow': '#FFD166',
+					'green': '#06D6A0',
+					'red': '#EF476F',
+					'brown': '#8B5E34'
 				}
 			},
 			borderRadius: {
@@ -89,6 +100,9 @@ export default {
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out'
+			},
+			fontFamily: {
+				'ukrainian': ['Montserrat', 'sans-serif']
 			}
 		}
 	},
