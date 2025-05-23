@@ -18,7 +18,7 @@ const Profile = () => {
     { id: 3, name: "Книголюб", description: "Прочитай 5 книг", unlocked: true, icon: "📚" },
     { id: 4, name: "Емоційний інтелект", description: "Відзнач 20 різних емоцій", unlocked: false, icon: "🧠" },
     { id: 5, name: "Філософ", description: "Запиши 30 думок дня", unlocked: false, icon: "🤔" },
-    { id: 6, name: "Воїн світла", description: "Заповнюй Компас 30 днів поспіль", unlocked: false, icon: "⚔️" }
+    { id: 6, name: "Взірець досконалості", description: "Заповнюй Компас 30 днів поспіль", unlocked: false, icon: "⚔️" }
   ];
 
   // Generate last 10 days for history
