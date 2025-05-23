@@ -25,7 +25,7 @@ const Semen: React.FC<SemenProps> = ({ className = "" }) => {
     <div className={flex flex-col items-center ${className}}>
       <div className="relative">
         <img
-          src="/image_semen_main"
+          src="/image_semen_main.png"
           width="120" 
           height="120" 
           viewBox="0 0 120 120" 
@@ -39,7 +39,7 @@ const Semen: React.FC<SemenProps> = ({ className = "" }) => {
       </div>
       <div className="mt-4">
         <img
-          src="/image_semen_main"
+          src="/image_semen_main.png"
           width="120" 
           height="120" 
           viewBox="0 0 120 120" 
