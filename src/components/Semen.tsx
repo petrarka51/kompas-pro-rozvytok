@@ -36,12 +36,11 @@ const Semen: React.FC<SemenProps> = ({ className = "" }) => {
         </div>
       </div>
       <div className="mt-4">
-        <svg 
+        <img
+          src="/image_semen_main"
           width="120" 
           height="120" 
           viewBox="0 0 120 120" 
-          fill="none" 
-          xmlns="http://www.w3.org/2000/svg"
           className="transform -scale-x-100"
         >
           <path d="M60 100C82.0914 100 100 82.0914 100 60C100 37.9086 82.0914 20 60 20C37.9086 20 20 37.9086 20 60C20 82.0914 37.9086 100 60 100Z" fill="#8B5E34"/>
