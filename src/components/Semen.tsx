@@ -45,6 +45,6 @@ const Semen: React.FC<SemenProps> = ({ className = "" }) => {
       </div>
     </div>
   );
-
+};
 
 export default Semen;
