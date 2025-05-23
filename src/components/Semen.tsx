@@ -24,13 +24,12 @@ const Semen: React.FC<SemenProps> = ({ className = "" }) => {
   return (
     <div className={flex flex-col items-center ${className}}>
       <div className="relative">
-        <img
-          src="/image_semen_main.png"
-          width="120" 
-          height="120" 
-          viewBox="0 0 120 120" 
-          className="transform -scale-x-100"
-        >
+       <img 
+            src="/image_semen_main.png" 
+            width="120"
+            height="120"
+            className="rounded-lg shadow-lg transition-all duration-300 hover:scale-105"
+        />
           <path d="M50,5 Q80,20 80,50 Q80,80 50,95 Q20,80 20,50 Q20,20 50,5" fill="#f9fafb" />
         </svg>
         <div className="relative z-10 bg-white p-4 rounded-lg shadow-md max-w-xs">
@@ -38,13 +37,12 @@ const Semen: React.FC<SemenProps> = ({ className = "" }) => {
         </div>
       </div>
       <div className="mt-4">
-        <img
-          src="/image_semen_main.png"
-          width="120" 
-          height="120" 
-          viewBox="0 0 120 120" 
-          className="transform -scale-x-100"
-        >
+     <img 
+            src="/image_semen_main.png" 
+            width="120"
+            height="120"
+            className="rounded-lg shadow-lg transition-all duration-300 hover:scale-105"
+        />
           <path d="M60 100C82.0914 100 100 82.0914 100 60C100 37.9086 82.0914 20 60 20C37.9086 20 20 37.9086 20 60C20 82.0914 37.9086 100 60 100Z" fill="#8B5E34"/>
           <path d="M40 55C46.0751 55 51 50.0751 51 44C51 37.9249 46.0751 33 40 33C33.9249 33 29 37.9249 29 44C29 50.0751 33.9249 55 40 55Z" fill="#5D3C1C"/>
           <path d="M80 55C86.0751 55 91 50.0751 91 44C91 37.9249 86.0751 33 80 33C73.9249 33 69 37.9249 69 44C69 50.0751 73.9249 55 80 55Z" fill="#5D3C1C"/>
