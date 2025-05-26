@@ -22,7 +22,7 @@ const Semen: React.FC<SemenProps> = ({ className = "" }) => {
   }, []);
 
   return (
-    <div className={flex flex-col items-center ${className}}>
+    <div className={`flex flex-col items-center ${className}`}>
       <div className="relative">
         <svg 
           className="absolute top-0 right-0 transform translate-x-12 -translate-y-8 w-36 h-36 text-gray-100"
