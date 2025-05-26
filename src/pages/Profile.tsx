@@ -1,9 +1,7 @@
-
 import { useState, useEffect } from "react";
-import { CircleUserRound } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import AvatarUpload from "@/components/AvatarUpload";
 
 const Profile = () => {
   const { user } = useAuth();
@@ -26,21 +24,35 @@ const Profile = () => {
 
   const fetchProfile = async () => {
     try {
+      // Отримуємо профіль користувача
       const { data: profileData } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', user?.id)
         .single();
 
+      // Отримуємо статистику з записів компасу
+      const { data: entriesData } = await supabase
+        .from('compass_entries')
+        .select('*')
+        .eq('user_id', user?.id);
+
       if (profileData) {
         setProfile(profileData);
+        
+        // Розраховуємо статистику на основі реальних даних
+        const totalEntries = entriesData?.length || 0;
+        const physicalEntries = entriesData?.filter(entry => entry.physical_activity)?.length || 0;
+        const emotionalEntries = entriesData?.filter(entry => entry.emotion)?.length || 0;
+        const intellectualEntries = entriesData?.filter(entry => entry.intellectual_activity)?.length || 0;
+
         setUserStats({
           points: profileData.points || 0,
           streak: profileData.current_streak || 0,
           totalDays: profileData.total_days || 0,
-          physical: 35, // Можна розрахувати на основі записів
-          emotional: 40,
-          intellectual: 25
+          physical: totalEntries > 0 ? Math.round((physicalEntries / totalEntries) * 100) : 0,
+          emotional: totalEntries > 0 ? Math.round((emotionalEntries / totalEntries) * 100) : 0,
+          intellectual: totalEntries > 0 ? Math.round((intellectualEntries / totalEntries) * 100) : 0
         });
       }
     } catch (error) {
@@ -48,6 +60,10 @@ const Profile = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleAvatarUpdate = (newAvatarUrl: string) => {
+    setProfile((prev: any) => ({ ...prev, avatar_url: newAvatarUrl }));
   };
 
   const achievements = [
@@ -59,12 +75,12 @@ const Profile = () => {
     { id: 6, name: "Взірець досконалості", description: "Заповнюй Компас 30 днів поспіль", unlocked: userStats.streak >= 30, icon: "⚔️" }
   ];
 
-  // Generate last 10 days for history
+  // Генеруємо останні 10 днів для історії
   const today = new Date();
   const last10days = Array.from({ length: 10 }, (_, i) => {
     const date = new Date(today);
     date.setDate(today.getDate() - i);
-    const filled = i <= userStats.streak; // Показуємо заповнені дні на основі поточної серії
+    const filled = i <= userStats.streak;
     return {
       date: date.toLocaleDateString('uk-UA', { day: 'numeric', month: 'short' }),
       filled
@@ -100,13 +116,11 @@ const Profile = () => {
     <div className="container mx-auto px-4 py-8 max-w-5xl">
       <div className="bg-white rounded-lg shadow-lg p-8">
         <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
-          <div className="w-32 h-32 overflow-hidden">
-            <Avatar className="w-32 h-32">
-              <AvatarImage src={profile?.avatar_url} alt={profile?.full_name} />
-              <AvatarFallback>
-                <CircleUserRound size={80} />
-              </AvatarFallback>
-            </Avatar>
+          <div className="flex-shrink-0">
+            <AvatarUpload 
+              avatarUrl={profile?.avatar_url} 
+              onAvatarUpdate={handleAvatarUpdate}
+            />
           </div>
           
           <div className="flex-grow">

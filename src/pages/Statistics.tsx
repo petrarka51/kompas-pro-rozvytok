@@ -41,11 +41,14 @@ const Statistics = () => {
         .from('compass_entries')
         .select('*')
         .eq('user_id', user?.id)
-        .order('date', { ascending: false })
-        .limit(30);
+        .order('date', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching entries:', error);
+        throw error;
+      }
       
+      console.log('Fetched entries:', data);
       setEntries(data || []);
     } catch (error) {
       console.error('Error fetching entries:', error);
@@ -117,7 +120,7 @@ const Statistics = () => {
                 <h3 className="font-bold">Зароблено балів</h3>
               </div>
               <p className="text-3xl font-bold text-amber-500">
-                {entries.reduce((sum, entry) => sum + (entry.points_earned || 0), 0)}
+                {entries.reduce((sum, entry) => sum + (entry.points_earned || 10), 0)}
               </p>
             </Card>
             

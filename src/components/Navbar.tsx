@@ -45,12 +45,6 @@ const Navbar = () => {
               <div className="h-8 w-20 bg-gray-200 animate-pulse rounded"></div>
             ) : user ? (
               <div className="flex items-center space-x-2">
-                <Link to="/profile">
-                  <Button variant="ghost" size="sm" className="flex items-center space-x-2">
-                    <User size={16} />
-                    <span>Мій профіль</span>
-                  </Button>
-                </Link>
                 <Button onClick={signOut} variant="ghost" size="sm">
                   <LogOut size={16} />
                 </Button>
