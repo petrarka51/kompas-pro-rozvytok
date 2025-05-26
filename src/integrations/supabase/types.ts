@@ -9,7 +9,102 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      compass_entries: {
+        Row: {
+          created_at: string
+          date: string
+          emotion: string | null
+          emotion_emoji: string | null
+          event_of_day: string | null
+          gratitude_of_day: string | null
+          id: string
+          intellectual_activity: string | null
+          intellectual_description: string | null
+          person_of_day: string | null
+          physical_activity: string | null
+          physical_description: string | null
+          points_earned: number | null
+          thought_of_day: string | null
+          updated_at: string
+          user_id: string
+          value_of_day: string | null
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          emotion?: string | null
+          emotion_emoji?: string | null
+          event_of_day?: string | null
+          gratitude_of_day?: string | null
+          id?: string
+          intellectual_activity?: string | null
+          intellectual_description?: string | null
+          person_of_day?: string | null
+          physical_activity?: string | null
+          physical_description?: string | null
+          points_earned?: number | null
+          thought_of_day?: string | null
+          updated_at?: string
+          user_id: string
+          value_of_day?: string | null
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          emotion?: string | null
+          emotion_emoji?: string | null
+          event_of_day?: string | null
+          gratitude_of_day?: string | null
+          id?: string
+          intellectual_activity?: string | null
+          intellectual_description?: string | null
+          person_of_day?: string | null
+          physical_activity?: string | null
+          physical_description?: string | null
+          points_earned?: number | null
+          thought_of_day?: string | null
+          updated_at?: string
+          user_id?: string
+          value_of_day?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          current_streak: number | null
+          email: string | null
+          full_name: string | null
+          id: string
+          points: number | null
+          total_days: number | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          current_streak?: number | null
+          email?: string | null
+          full_name?: string | null
+          id: string
+          points?: number | null
+          total_days?: number | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          current_streak?: number | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          points?: number | null
+          total_days?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

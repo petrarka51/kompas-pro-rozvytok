@@ -1,24 +1,62 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CircleUserRound } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const Profile = () => {
-  const [userStats] = useState({
-    points: 450,
-    streak: 9,
-    totalDays: 45,
-    physical: 35,
-    emotional: 40,
-    intellectual: 25
+  const { user } = useAuth();
+  const [profile, setProfile] = useState<any>(null);
+  const [userStats, setUserStats] = useState({
+    points: 0,
+    streak: 0,
+    totalDays: 0,
+    physical: 0,
+    emotional: 0,
+    intellectual: 0
   });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (user) {
+      fetchProfile();
+    }
+  }, [user]);
+
+  const fetchProfile = async () => {
+    try {
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user?.id)
+        .single();
+
+      if (profileData) {
+        setProfile(profileData);
+        setUserStats({
+          points: profileData.points || 0,
+          streak: profileData.current_streak || 0,
+          totalDays: profileData.total_days || 0,
+          physical: 35, // Можна розрахувати на основі записів
+          emotional: 40,
+          intellectual: 25
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const achievements = [
-    { id: 1, name: "Початківець", description: "Заповни Компас 7 днів поспіль", unlocked: true, icon: "🌱" },
-    { id: 2, name: "Спортсмен", description: "Запиши 10 фізичних активностей", unlocked: true, icon: "🏃‍♂️" },
-    { id: 3, name: "Книголюб", description: "Прочитай 5 книг", unlocked: true, icon: "📚" },
+    { id: 1, name: "Початківець", description: "Заповни Компас 7 днів поспіль", unlocked: userStats.streak >= 7, icon: "🌱" },
+    { id: 2, name: "Спортсмен", description: "Запиши 10 фізичних активностей", unlocked: false, icon: "🏃‍♂️" },
+    { id: 3, name: "Книголюб", description: "Прочитай 5 книг", unlocked: false, icon: "📚" },
     { id: 4, name: "Емоційний інтелект", description: "Відзнач 20 різних емоцій", unlocked: false, icon: "🧠" },
     { id: 5, name: "Філософ", description: "Запиши 30 думок дня", unlocked: false, icon: "🤔" },
-    { id: 6, name: "Взірець досконалості", description: "Заповнюй Компас 30 днів поспіль", unlocked: false, icon: "⚔️" }
+    { id: 6, name: "Взірець досконалості", description: "Заповнюй Компас 30 днів поспіль", unlocked: userStats.streak >= 30, icon: "⚔️" }
   ];
 
   // Generate last 10 days for history
@@ -26,24 +64,54 @@ const Profile = () => {
   const last10days = Array.from({ length: 10 }, (_, i) => {
     const date = new Date(today);
     date.setDate(today.getDate() - i);
-    const filled = i === 0 || i === 1 || i === 2 || i === 3 || i === 4 || i === 5 || i === 6 || i === 7 || i === 9;
+    const filled = i <= userStats.streak; // Показуємо заповнені дні на основі поточної серії
     return {
       date: date.toLocaleDateString('uk-UA', { day: 'numeric', month: 'short' }),
       filled
     };
   }).reverse();
 
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-8 max-w-5xl">
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          <div className="animate-pulse">
+            <div className="h-32 w-32 bg-gray-200 rounded-full mb-4"></div>
+            <div className="h-6 bg-gray-200 rounded mb-2"></div>
+            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="container mx-auto px-4 py-8 max-w-5xl">
+        <div className="bg-white rounded-lg shadow-lg p-8 text-center">
+          <h2 className="text-2xl font-bold mb-4">Необхідна авторизація</h2>
+          <p className="text-gray-600">Будь ласка, увійдіть в систему для перегляду профілю.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl">
       <div className="bg-white rounded-lg shadow-lg p-8">
         <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
-          <div className="w-32 h-32 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 overflow-hidden">
-            <CircleUserRound size={80} />
+          <div className="w-32 h-32 overflow-hidden">
+            <Avatar className="w-32 h-32">
+              <AvatarImage src={profile?.avatar_url} alt={profile?.full_name} />
+              <AvatarFallback>
+                <CircleUserRound size={80} />
+              </AvatarFallback>
+            </Avatar>
           </div>
           
           <div className="flex-grow">
-            <h2 className="text-2xl font-bold mb-2">Користувач Компасу</h2>
-            <p className="text-gray-600 mb-4">user@example.com</p>
+            <h2 className="text-2xl font-bold mb-2">{profile?.full_name || 'Користувач Компасу'}</h2>
+            <p className="text-gray-600 mb-4">{profile?.email || user.email}</p>
             
             <div className="stats flex flex-wrap gap-6 mb-8">
               <div className="stat p-4 bg-compass-purple-light rounded-lg">
