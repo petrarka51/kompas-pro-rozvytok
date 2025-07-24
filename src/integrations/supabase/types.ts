@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      actions: {
+        Row: {
+          activity_type: string
+          created_at: string
+          date: string
+          emotions: string | null
+          id: string
+          insights: string | null
+          time_spent: number
+          title: string
+          updated_at: string
+          user_id: string
+          work_done: string
+        }
+        Insert: {
+          activity_type: string
+          created_at?: string
+          date: string
+          emotions?: string | null
+          id?: string
+          insights?: string | null
+          time_spent: number
+          title: string
+          updated_at?: string
+          user_id: string
+          work_done: string
+        }
+        Update: {
+          activity_type?: string
+          created_at?: string
+          date?: string
+          emotions?: string | null
+          id?: string
+          insights?: string | null
+          time_spent?: number
+          title?: string
+          updated_at?: string
+          user_id?: string
+          work_done?: string
+        }
+        Relationships: []
+      }
       compass_entries: {
         Row: {
           created_at: string
