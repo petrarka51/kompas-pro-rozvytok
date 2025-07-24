@@ -35,6 +35,9 @@ const Navbar = () => {
                 <Link to="/statistics" className="text-gray-900 hover:text-compass-purple px-3 py-2 text-sm font-medium">
                   Моя статистика
                 </Link>
+                <Link to="/actions" className="text-gray-900 hover:text-compass-purple px-3 py-2 text-sm font-medium">
+                  Дії
+                </Link>
                 <Link to="/values" className="text-gray-900 hover:text-compass-purple px-3 py-2 text-sm font-medium">
                   Цінності
                 </Link>
@@ -107,6 +110,13 @@ const Navbar = () => {
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Моя статистика
+                  </Link>
+                  <Link 
+                    to="/actions" 
+                    className="block text-gray-900 hover:text-compass-purple px-3 py-2 text-base font-medium"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Дії
                   </Link>
                   <Link 
                     to="/values" 
