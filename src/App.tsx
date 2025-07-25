@@ -11,8 +11,6 @@ import Navbar from "./components/Navbar";
 import CompassPage from "./pages/CompassPage";
 import Profile from "./pages/Profile";
 import Statistics from "./pages/Statistics";
-import Values from "./pages/Values";
-import Instructions from "./pages/Instructions";
 import Auth from "./pages/Auth";
 import Actions from "./pages/Actions";
 
@@ -32,8 +30,6 @@ const App = () => (
           <Route path="/profile" element={<Profile />} />
           <Route path="/statistics" element={<Statistics />} />
           <Route path="/actions" element={<Actions />} />
-          <Route path="/values" element={<Values />} />
-          <Route path="/instructions" element={<Instructions />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

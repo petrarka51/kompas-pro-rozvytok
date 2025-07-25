@@ -38,12 +38,6 @@ const Navbar = () => {
                 <Link to="/actions" className="text-gray-900 hover:text-compass-purple px-3 py-2 text-sm font-medium">
                   Дії
                 </Link>
-                <Link to="/values" className="text-gray-900 hover:text-compass-purple px-3 py-2 text-sm font-medium">
-                  Цінності
-                </Link>
-                <Link to="/instructions" className="text-gray-900 hover:text-compass-purple px-3 py-2 text-sm font-medium">
-                  Інструкція
-                </Link>
               </>
             )}
           </div>
@@ -117,20 +111,6 @@ const Navbar = () => {
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Дії
-                  </Link>
-                  <Link 
-                    to="/values" 
-                    className="block text-gray-900 hover:text-compass-purple px-3 py-2 text-base font-medium"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Цінності
-                  </Link>
-                  <Link 
-                    to="/instructions" 
-                    className="block text-gray-900 hover:text-compass-purple px-3 py-2 text-base font-medium"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Інструкція
                   </Link>
                 </>
               )}
