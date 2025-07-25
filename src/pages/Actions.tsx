@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,7 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, Edit, Trash2, Plus } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { CalendarIcon, Edit, Trash2, Plus, ChevronDown } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
@@ -28,10 +30,14 @@ interface Action {
 }
 
 const activityTypes = [
-  "Фізичний розвиток",
-  "Інтелектуальний розвиток", 
-  "Емоційний розвиток",
-  "Соціальний розвиток"
+  "Адвокаційна кампанія",
+  "Обговорення книг",
+  "Спортивні змагання",
+  "Дебатні турніри",
+  "Волонтерство",
+  "Розповідь про Академію",
+  "Медіа матеріал про експедицію",
+  "Інше"
 ];
 
 const Actions = () => {
@@ -39,6 +45,7 @@ const Actions = () => {
   const [actions, setActions] = useState<Action[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingAction, setEditingAction] = useState<Action | null>(null);
+  const [showForm, setShowForm] = useState(false);
   
   // Form state
   const [formData, setFormData] = useState({
@@ -96,6 +103,7 @@ const Actions = () => {
       emotions: ""
     });
     setEditingAction(null);
+    setShowForm(false);
   };
 
   const validateForm = () => {
@@ -203,6 +211,7 @@ const Actions = () => {
       insights: action.insights || "",
       emotions: action.emotions || ""
     });
+    setShowForm(true);
   };
 
   const handleDelete = async (id: string) => {
@@ -232,6 +241,20 @@ const Actions = () => {
     }
   };
 
+  const handleNewAction = (activityType: string) => {
+    setFormData({
+      title: "",
+      date: new Date(),
+      activity_type: activityType,
+      time_spent: 1,
+      work_done: "",
+      insights: "",
+      emotions: ""
+    });
+    setEditingAction(null);
+    setShowForm(true);
+  };
+
   if (!user) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -248,145 +271,169 @@ const Actions = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-6">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold mb-2">Мої дії</h1>
-        <p className="text-muted-foreground">
-          Додавайте, переглядайте та редагуйте свої дії для розвитку
-        </p>
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold mb-2">Мої дії</h1>
+          <p className="text-muted-foreground">
+            Додавайте, переглядайте та редагуйте свої дії для розвитку
+          </p>
+        </div>
+        
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button className="flex items-center gap-2">
+              <Plus size={20} />
+              Додати нову дію
+              <ChevronDown size={16} />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-64">
+            {activityTypes.map((type) => (
+              <DropdownMenuItem 
+                key={type} 
+                onClick={() => handleNewAction(type)}
+                className="cursor-pointer"
+              >
+                {type}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
-      {/* Form Card */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Plus size={20} />
-            {editingAction ? "Редагувати дію" : "Додати нову дію"}
-          </CardTitle>
-          <CardDescription>
-            Заповніть форму для {editingAction ? "оновлення" : "створення"} дії
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Title */}
+      {/* Form Card - shown when adding/editing */}
+      {showForm && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Plus size={20} />
+              {editingAction ? "Редагувати дію" : "Додати нову дію"}
+            </CardTitle>
+            <CardDescription>
+              Заповніть форму для {editingAction ? "оновлення" : "створення"} дії
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Title */}
+              <div className="space-y-2">
+                <Label htmlFor="title">Назва активності *</Label>
+                <Input
+                  id="title"
+                  placeholder="Наприклад, Волонтерив у притулку"
+                  value={formData.title}
+                  onChange={(e) => handleInputChange('title', e.target.value)}
+                />
+              </div>
+
+              {/* Date */}
+              <div className="space-y-2">
+                <Label>Дата *</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !formData.date && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {formData.date ? format(formData.date, "PPP", { locale: uk }) : <span>Оберіть дату</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={formData.date}
+                      onSelect={(date) => date && handleInputChange('date', date)}
+                      disabled={(date) => date > new Date()}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+
+              {/* Activity Type */}
+              <div className="space-y-2">
+                <Label>Тип активності *</Label>
+                <Select value={formData.activity_type} onValueChange={(value) => handleInputChange('activity_type', value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Оберіть тип активності" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {activityTypes.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {type}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Time Spent */}
+              <div className="space-y-2">
+                <Label htmlFor="time_spent">Час, витрачений на дію (хвилини) *</Label>
+                <Input
+                  id="time_spent"
+                  type="number"
+                  min="1"
+                  value={formData.time_spent}
+                  onChange={(e) => handleInputChange('time_spent', parseInt(e.target.value) || 1)}
+                />
+              </div>
+            </div>
+
+            {/* Work Done */}
             <div className="space-y-2">
-              <Label htmlFor="title">Назва активності *</Label>
-              <Input
-                id="title"
-                placeholder="Наприклад, Волонтерив у притулку"
-                value={formData.title}
-                onChange={(e) => handleInputChange('title', e.target.value)}
+              <Label htmlFor="work_done">Виконана мною робота *</Label>
+              <Textarea
+                id="work_done"
+                placeholder="Короткий опис: що саме було зроблено"
+                value={formData.work_done}
+                onChange={(e) => handleInputChange('work_done', e.target.value)}
+                rows={3}
               />
             </div>
 
-            {/* Date */}
+            {/* Insights */}
             <div className="space-y-2">
-              <Label>Дата *</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left font-normal",
-                      !formData.date && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {formData.date ? format(formData.date, "PPP", { locale: uk }) : <span>Оберіть дату</span>}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={formData.date}
-                    onSelect={(date) => date && handleInputChange('date', date)}
-                    disabled={(date) => date > new Date()}
-                    initialFocus
-                    className={cn("p-3 pointer-events-auto")}
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-
-            {/* Activity Type */}
-            <div className="space-y-2">
-              <Label>Тип активності *</Label>
-              <Select value={formData.activity_type} onValueChange={(value) => handleInputChange('activity_type', value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Оберіть тип активності" />
-                </SelectTrigger>
-                <SelectContent>
-                  {activityTypes.map((type) => (
-                    <SelectItem key={type} value={type}>
-                      {type}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Time Spent */}
-            <div className="space-y-2">
-              <Label htmlFor="time_spent">Час, витрачений на дію (хвилини) *</Label>
-              <Input
-                id="time_spent"
-                type="number"
-                min="1"
-                value={formData.time_spent}
-                onChange={(e) => handleInputChange('time_spent', parseInt(e.target.value) || 1)}
+              <Label htmlFor="insights">Зміст (усвідомлення)</Label>
+              <Textarea
+                id="insights"
+                placeholder="Що я усвідомив(-ла) після цієї дії?"
+                value={formData.insights}
+                onChange={(e) => handleInputChange('insights', e.target.value)}
+                rows={3}
               />
             </div>
-          </div>
 
-          {/* Work Done */}
-          <div className="space-y-2">
-            <Label htmlFor="work_done">Виконана мною робота *</Label>
-            <Textarea
-              id="work_done"
-              placeholder="Короткий опис: що саме було зроблено"
-              value={formData.work_done}
-              onChange={(e) => handleInputChange('work_done', e.target.value)}
-              rows={3}
-            />
-          </div>
+            {/* Emotions */}
+            <div className="space-y-2">
+              <Label htmlFor="emotions">Смак (емоційне враження)</Label>
+              <Textarea
+                id="emotions"
+                placeholder="Які емоції залишились після дії?"
+                value={formData.emotions}
+                onChange={(e) => handleInputChange('emotions', e.target.value)}
+                rows={3}
+              />
+            </div>
 
-          {/* Insights */}
-          <div className="space-y-2">
-            <Label htmlFor="insights">Зміст (усвідомлення)</Label>
-            <Textarea
-              id="insights"
-              placeholder="Що я усвідомив(-ла) після цієї дії?"
-              value={formData.insights}
-              onChange={(e) => handleInputChange('insights', e.target.value)}
-              rows={3}
-            />
-          </div>
+            {/* Buttons */}
+            <div className="flex gap-2 pt-4">
+              <Button onClick={handleSubmit}>
+                {editingAction ? "Оновити дію" : "Зберегти дію"}
+              </Button>
+              <Button variant="outline" onClick={clearForm}>
+                Скасувати
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
-          {/* Emotions */}
-          <div className="space-y-2">
-            <Label htmlFor="emotions">Смак (емоційне враження)</Label>
-            <Textarea
-              id="emotions"
-              placeholder="Які емоції залишились після дії?"
-              value={formData.emotions}
-              onChange={(e) => handleInputChange('emotions', e.target.value)}
-              rows={3}
-            />
-          </div>
-
-          {/* Buttons */}
-          <div className="flex gap-2 pt-4">
-            <Button onClick={handleSubmit}>
-              {editingAction ? "Оновити дію" : "Зберегти дію"}
-            </Button>
-            <Button variant="outline" onClick={clearForm}>
-              Очистити
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Actions List */}
+      {/* Actions List - always visible */}
       <Card>
         <CardHeader>
           <CardTitle>Історія дій</CardTitle>
@@ -403,7 +450,7 @@ const Actions = () => {
           ) : actions.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-muted-foreground">
-                Ще немає збережених дій. Додайте першу дію вище!
+                Ще немає збережених дій. Додайте першу дію використовуючи кнопку "Додати нову дію"!
               </p>
             </div>
           ) : (
