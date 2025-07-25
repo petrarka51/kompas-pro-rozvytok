@@ -40,6 +40,20 @@ const activityTypes = [
   "Інше"
 ];
 
+const getActivityColor = (activityType: string) => {
+  const colorMap: Record<string, string> = {
+    "Адвокаційна кампанія": "hsl(var(--activity-advocacy))",
+    "Обговорення книг": "hsl(var(--activity-books))",
+    "Спортивні змагання": "hsl(var(--activity-sports))",
+    "Дебатні турніри": "hsl(var(--activity-debates))",
+    "Волонтерство": "hsl(var(--activity-volunteer))",
+    "Розповідь про Академію": "hsl(var(--activity-academy))",
+    "Медіа матеріал про експедицію": "hsl(var(--activity-media))",
+    "Інше": "hsl(var(--activity-other))"
+  };
+  return colorMap[activityType] || "hsl(var(--activity-other))";
+};
+
 const Actions = () => {
   const { user } = useAuth();
   const [actions, setActions] = useState<Action[]>([]);
@@ -67,6 +81,7 @@ const Actions = () => {
         .from('actions')
         .select('*')
         .eq('user_id', user.id)
+        .order('activity_type', { ascending: true })
         .order('date', { ascending: false });
 
       if (error) throw error;
@@ -456,14 +471,24 @@ const Actions = () => {
           ) : (
             <div className="space-y-4">
               {actions.map((action) => (
-                <Card key={action.id} className="border-l-4 border-l-primary">
+                <Card 
+                  key={action.id} 
+                  className="border-l-4" 
+                  style={{ borderLeftColor: getActivityColor(action.activity_type) }}
+                >
                   <CardContent className="p-4">
                     <div className="flex justify-between items-start mb-2">
                       <div>
                         <h3 className="font-semibold">{action.title}</h3>
-                        <p className="text-sm text-muted-foreground">
-                          {format(new Date(action.date), "dd MMMM yyyy", { locale: uk })} • {action.activity_type} • {action.time_spent} хв
-                        </p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span 
+                            className="inline-block w-3 h-3 rounded-full"
+                            style={{ backgroundColor: getActivityColor(action.activity_type) }}
+                          ></span>
+                          <p className="text-sm text-muted-foreground">
+                            {format(new Date(action.date), "dd MMMM yyyy", { locale: uk })} • {action.activity_type} • {action.time_spent} хв
+                          </p>
+                        </div>
                       </div>
                       <div className="flex gap-1">
                         <Button

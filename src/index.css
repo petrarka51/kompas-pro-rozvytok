@@ -45,6 +45,16 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Activity Type Colors */
+    --activity-advocacy: 14 86% 42%;
+    --activity-books: 142 69% 58%;
+    --activity-sports: 221 83% 53%;
+    --activity-debates: 262 83% 58%;
+    --activity-volunteer: 39 84% 56%;
+    --activity-academy: 262 52% 47%;
+    --activity-media: 188 86% 53%;
+    --activity-other: 215 16% 46%;
   }
 
   .dark {
@@ -84,6 +94,16 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Activity Type Colors */
+    --activity-advocacy: 14 86% 42%;
+    --activity-books: 142 69% 58%;
+    --activity-sports: 221 83% 53%;
+    --activity-debates: 262 83% 58%;
+    --activity-volunteer: 39 84% 56%;
+    --activity-academy: 262 52% 47%;
+    --activity-media: 188 86% 53%;
+    --activity-other: 215 16% 46%;
   }
 }
 
