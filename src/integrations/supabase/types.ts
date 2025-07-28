@@ -116,6 +116,224 @@ export type Database = {
         }
         Relationships: []
       }
+      english_tests: {
+        Row: {
+          created_at: string
+          date: string
+          grammar: number
+          id: string
+          listening: number
+          reading: number
+          test_number: number
+          updated_at: string
+          user_id: string
+          vocabulary: number
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          grammar: number
+          id?: string
+          listening: number
+          reading: number
+          test_number: number
+          updated_at?: string
+          user_id: string
+          vocabulary: number
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          grammar?: number
+          id?: string
+          listening?: number
+          reading?: number
+          test_number?: number
+          updated_at?: string
+          user_id?: string
+          vocabulary?: number
+        }
+        Relationships: []
+      }
+      essay_topics: {
+        Row: {
+          created_at: string
+          deadline: string
+          id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deadline: string
+          id?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deadline?: string
+          id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      essays: {
+        Row: {
+          character_count: number
+          content: string
+          created_at: string
+          id: string
+          topic_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          character_count: number
+          content: string
+          created_at?: string
+          id?: string
+          topic_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          character_count?: number
+          content?: string
+          created_at?: string
+          id?: string
+          topic_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "essays_topic_id_fkey"
+            columns: ["topic_id"]
+            isOneToOne: false
+            referencedRelation: "essay_topics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      first_times: {
+        Row: {
+          created_at: string
+          date: string
+          emotions: string | null
+          how_use_experience: string | null
+          id: string
+          title: string
+          updated_at: string
+          user_id: string
+          what_changed: string | null
+          what_proud_improve: string | null
+          why_recorded: string | null
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          emotions?: string | null
+          how_use_experience?: string | null
+          id?: string
+          title: string
+          updated_at?: string
+          user_id: string
+          what_changed?: string | null
+          what_proud_improve?: string | null
+          why_recorded?: string | null
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          emotions?: string | null
+          how_use_experience?: string | null
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+          what_changed?: string | null
+          what_proud_improve?: string | null
+          why_recorded?: string | null
+        }
+        Relationships: []
+      }
+      fitness_tests: {
+        Row: {
+          abs: number
+          created_at: string
+          date: string
+          id: string
+          long_jump_cm: number
+          pushups: number
+          run_2400m_seconds: number
+          run_40m_seconds: number
+          test_number: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          abs: number
+          created_at?: string
+          date: string
+          id?: string
+          long_jump_cm: number
+          pushups: number
+          run_2400m_seconds: number
+          run_40m_seconds: number
+          test_number: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          abs?: number
+          created_at?: string
+          date?: string
+          id?: string
+          long_jump_cm?: number
+          pushups?: number
+          run_2400m_seconds?: number
+          run_40m_seconds?: number
+          test_number?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      monthly_photos: {
+        Row: {
+          caption: string | null
+          created_at: string
+          id: string
+          month: number
+          photo_url: string
+          updated_at: string
+          user_id: string
+          year: number
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          month: number
+          photo_url: string
+          updated_at?: string
+          user_id: string
+          year: number
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          month?: number
+          photo_url?: string
+          updated_at?: string
+          user_id?: string
+          year?: number
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -149,6 +367,33 @@ export type Database = {
           points?: number | null
           total_days?: number | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      wishes: {
+        Row: {
+          created_at: string
+          id: string
+          order_number: number
+          updated_at: string
+          user_id: string
+          wish: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          order_number: number
+          updated_at?: string
+          user_id: string
+          wish: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          order_number?: number
+          updated_at?: string
+          user_id?: string
+          wish?: string
         }
         Relationships: []
       }
