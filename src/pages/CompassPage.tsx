@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CompassForm from "@/components/CompassForm";
@@ -8,11 +8,19 @@ import { Essays } from "@/components/development/Essays";
 import { FirstTimes } from "@/components/development/FirstTimes";
 import { Wishes } from "@/components/development/Wishes";
 import { MonthlyPhotos } from "@/components/development/MonthlyPhotos";
-import { Navigate } from "react-router-dom";
-import { StatisticsHistory } from "@/components/StatisticsHistory";
+import { Navigate, useSearchParams } from "react-router-dom";
 
 const CompassPage = () => {
   const { user, loading } = useAuth();
+  const [searchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState("compass");
+
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (tab) {
+      setActiveTab(tab);
+    }
+  }, [searchParams]);
 
   if (loading) {
     return (
@@ -31,7 +39,7 @@ const CompassPage = () => {
       <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold text-center mb-8">Компас розвитку</h1>
         
-        <Tabs defaultValue="compass" className="w-full">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="compass">Компас</TabsTrigger>
             <TabsTrigger value="statistics">Статистика</TabsTrigger>
@@ -46,10 +54,7 @@ const CompassPage = () => {
           </TabsContent>
 
           <TabsContent value="statistics" className="mt-6">
-            <div className="space-y-8">
-              <CompassStatistics />
-              <StatisticsHistory />
-            </div>
+            <CompassStatistics />
           </TabsContent>
 
           <TabsContent value="essays" className="mt-6">
