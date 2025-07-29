@@ -2,7 +2,7 @@
 import React from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CompassForm } from "@/components/CompassForm";
+import CompassForm from "@/components/CompassForm";
 import { CompassStatistics } from "@/components/CompassStatistics";
 import { Essays } from "@/components/development/Essays";
 import { FirstTimes } from "@/components/development/FirstTimes";
