@@ -1,11 +1,10 @@
 
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
-import { Calendar, TrendingUp, Award, Target, Clock, Activity } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { CompassOverview } from "./compass/CompassOverview";
+import { CompassProgress } from "./compass/CompassProgress";
+import { RecentEntries } from "./compass/RecentEntries";
 
 interface CompassEntry {
   id: string;
@@ -37,7 +36,6 @@ export const CompassStatistics = () => {
 
   const fetchData = async () => {
     try {
-      // Fetch compass entries
       const { data: entriesData, error: entriesError } = await supabase
         .from('compass_entries')
         .select('*')
@@ -47,7 +45,6 @@ export const CompassStatistics = () => {
 
       if (entriesError) throw entriesError;
 
-      // Fetch profile data
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('points, current_streak, total_days')
@@ -103,118 +100,19 @@ export const CompassStatistics = () => {
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Загальні бали</CardTitle>
-            <Award className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{profile.points}</div>
-            <p className="text-xs text-muted-foreground">
-              Середній бал: {getAveragePoints()}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Поточна серія</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{profile.current_streak}</div>
-            <p className="text-xs text-muted-foreground">
-              днів поспіль
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Загальні дні</CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{profile.total_days}</div>
-            <p className="text-xs text-muted-foreground">
-              днів активності
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Тижнева активність</CardTitle>
-            <Activity className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{getWeeklyActivity()}</div>
-            <p className="text-xs text-muted-foreground">
-              з 7 днів
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Прогрес до мети</CardTitle>
-            <CardDescription>Ваш щоденний прогрес</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="text-sm">Поточна серія</span>
-                <span className="text-sm font-medium">{profile.current_streak}/30 днів</span>
-              </div>
-              <Progress value={(profile.current_streak / 30) * 100} className="h-2" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Найчастіша емоція</CardTitle>
-            <CardDescription>За останні записи</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-center p-4">
-              <Badge variant="outline" className="text-lg">
-                {getMostFrequentEmotion()}
-              </Badge>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Останні записи</CardTitle>
-          <CardDescription>Ваша активність за останні дні</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {entries.slice(0, 5).map((entry) => (
-              <div key={entry.id} className="flex items-center justify-between p-3 border rounded-lg">
-                <div className="flex items-center space-x-3">
-                  <div className="text-2xl">{entry.emotion_emoji || "😊"}</div>
-                  <div>
-                    <p className="font-medium">{new Date(entry.date).toLocaleDateString('uk-UA')}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {entry.physical_activity || "Без фізичної активності"}
-                    </p>
-                  </div>
-                </div>
-                <Badge variant="secondary">
-                  {entry.points_earned} балів
-                </Badge>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+      <CompassOverview 
+        profile={profile}
+        weeklyActivity={getWeeklyActivity()}
+        mostFrequentEmotion={getMostFrequentEmotion()}
+        averagePoints={getAveragePoints()}
+      />
+      
+      <CompassProgress 
+        profile={profile}
+        mostFrequentEmotion={getMostFrequentEmotion()}
+      />
+      
+      <RecentEntries entries={entries} />
     </div>
   );
 };
