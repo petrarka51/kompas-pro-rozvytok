@@ -73,8 +73,10 @@ export const Essays = () => {
   };
 
   useEffect(() => {
-    fetchEssays();
-    fetchTopics();
+    if (user) {
+      fetchEssays();
+      fetchTopics();
+    }
   }, [user]);
 
   const handleSubmit = async () => {

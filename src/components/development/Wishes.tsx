@@ -51,7 +51,9 @@ export const Wishes = () => {
   };
 
   useEffect(() => {
-    fetchWishes();
+    if (user) {
+      fetchWishes();
+    }
   }, [user]);
 
   const handleSubmit = async () => {
