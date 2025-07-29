@@ -196,12 +196,14 @@ export const MonthlyPhotos = () => {
 
     try {
       // Delete from storage
-      const fileName = photo.photo_url.split('/').pop();
-      if (fileName) {
-        await supabase.storage
-          .from('monthly_photos')
-          .remove([`${user?.id}/${photo.year}/${fileName}`]);
-      }
+      const urlParts = photo.photo_url.split('/');
+      const fileName = urlParts[urlParts.length - 1];
+      const fileExt = fileName.split('.').pop();
+      const storageFileName = `${user?.id}/${photo.year}/${photo.month}.${fileExt}`;
+      
+      await supabase.storage
+        .from('monthly_photos')
+        .remove([storageFileName]);
 
       // Delete from database
       const { error } = await supabase

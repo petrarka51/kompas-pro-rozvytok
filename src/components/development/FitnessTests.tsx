@@ -232,7 +232,7 @@ export const FitnessTests = () => {
                                 onSelect={field.onChange}
                                 disabled={(date) => date > new Date()}
                                 initialFocus
-                                className="pointer-events-auto"
+                                className="p-3 pointer-events-auto"
                               />
                             </PopoverContent>
                           </Popover>
