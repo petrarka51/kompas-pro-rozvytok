@@ -9,6 +9,7 @@ import { FirstTimes } from "@/components/development/FirstTimes";
 import { Wishes } from "@/components/development/Wishes";
 import { MonthlyPhotos } from "@/components/development/MonthlyPhotos";
 import { Navigate } from "react-router-dom";
+import { StatisticsHistory } from "@/components/StatisticsHistory";
 
 const CompassPage = () => {
   const { user, loading } = useAuth();
@@ -27,7 +28,7 @@ const CompassPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold text-center mb-8">Компас розвитку</h1>
         
         <Tabs defaultValue="compass" className="w-full">
@@ -45,7 +46,10 @@ const CompassPage = () => {
           </TabsContent>
 
           <TabsContent value="statistics" className="mt-6">
-            <CompassStatistics />
+            <div className="space-y-8">
+              <CompassStatistics />
+              <StatisticsHistory />
+            </div>
           </TabsContent>
 
           <TabsContent value="essays" className="mt-6">
