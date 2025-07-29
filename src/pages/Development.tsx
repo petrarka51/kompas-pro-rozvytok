@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+
+import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { FitnessTests } from "@/components/development/FitnessTests";
@@ -11,7 +12,18 @@ import { useAuth } from "@/hooks/useAuth";
 import { Navigate } from "react-router-dom";
 
 const Development = () => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-[calc(100vh-4rem)] p-4 bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Завантаження...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!user) {
     return <Navigate to="/auth" replace />;
@@ -31,12 +43,12 @@ const Development = () => {
 
         <Tabs defaultValue="fitness" className="w-full">
           <TabsList className="grid w-full grid-cols-6">
-            <TabsTrigger value="fitness">🏃 Фітнес-тест</TabsTrigger>
+            <TabsTrigger value="fitness">🏃 Фітнес</TabsTrigger>
             <TabsTrigger value="english">🇬🇧 Англійська</TabsTrigger>
             <TabsTrigger value="essays">📚 Есе</TabsTrigger>
             <TabsTrigger value="first-times">🌟 Вперше</TabsTrigger>
-            <TabsTrigger value="wishes">🎯 100 бажань</TabsTrigger>
-            <TabsTrigger value="photos">📸 Фото місяця</TabsTrigger>
+            <TabsTrigger value="wishes">🎯 Бажання</TabsTrigger>
+            <TabsTrigger value="photos">📸 Фото</TabsTrigger>
           </TabsList>
 
           <TabsContent value="fitness" className="mt-6">
